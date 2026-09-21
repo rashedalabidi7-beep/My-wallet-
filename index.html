@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>iWallet Pro</title>
+    <style>
+        :root {
+            --ios-bg: #09090b; 
+            --ios-card: #18181b; 
+            --ios-card-inner: #27272a;
+            --ios-text-main: #ffffff;
+            --ios-text-muted: #a1a1aa;
+            --ios-border: rgba(255, 255, 255, 0.08);
+            
+            /* ألوان الخزنات المخصصة */
+            --color-expenses: #34d399;   /* أخضر زمردي للمصاريف اليومية */
+            --color-university: #60a5fa; /* أزرق سماوي للجامعة */
+            --color-savings: #fbbf24;    /* ذهبي دافئ للادخار */
+            --color-emergency: #f87171;  /* أحمر ناعم للطوارئ */
+            
+            --ios-blue: #3b82f6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--ios-bg);
+            color: var(--ios-text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 110px;
+            padding-top: env(safe-area-inset-top);
+            overflow-x: hidden;
+        }
+
+        .container {
+            padding: 20px;
+            max-width: 480px;
+            margin: 0 auto;
+            width: 100%;
+            flex: 1;
+        }
+
+        header {
+            margin-bottom: 24px;
+            padding-top: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        header .header-meta {
+            display: flex;
+            flex-direction: column;
+        }
+
+        header .date-tag {
+            font-size: 0.75rem;
+            color: var(--ios-text-muted);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        /* كرت المحفظة الكلي */
+        .apple-card {
+            background: linear-gradient(145deg, #1e1b4b 0%, #09090b 100%);
+            border: 1px solid var(--ios-border);
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 24px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .apple-card p {
+            font-size: 0.8rem;
+            color: var(--ios-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .apple-card h2 {
+            font-size: 2.6rem;
+            font-weight: 800;
+            margin-top: 6px;
+            letter-spacing: -1px;
+        }
+
+        /* شبكة الخزنات الـ Widgets */
+        .ios-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        .ios-widget {
+            background-color: var(--ios-card);
+            border-radius: 22px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 140px;
+            border: 1px solid var(--ios-border);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .ios-widget:active {
+            transform: scale(0.96);
+        }
+
+        /* ألوان حدود الخزنات المتناغمة */
+        #widget-expenses { border-left: 4px solid var(--color-expenses); }
+        #widget-university { border-left: 4px solid var(--color-university); }
+        #widget-savings { border-left: 4px solid var(--color-savings); }
+        #widget-emergency { border-left: 4px solid var(--color-emergency); }
+
+        .widget-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .widget-icon {
+            font-size: 1.1rem;
+            background: var(--ios-card-inner);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .widget-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--ios-text-main);
+        }
+
+        .widget-amount {
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-top: 6px;
+        }
+
+        /* أشرطة التقدم */
+        .progress-container {
+            width: 100%;
+            background-color: var(--ios-card-inner);
+            height: 6px;
+            border-radius: 3px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            border-radius: 3px;
+            transition: width 0.4s cubic-bezier(0.1, 0.8, 0.3, 1);
+        }
+
+        .progress-meta {
+            font-size: 0.65rem;
+            color: var(--ios-text-muted);
+            margin-top: 6px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* العناوين والجروبات */
+        .ios-section-title {
+            font-size: 0.85rem;
+            color: var(--ios-text-muted);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            padding-right: 6px;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ios-group-list {
+            background-color: var(--ios-card);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 24px;
+            border: 1px solid var(--ios-border);
+        }
+
+        .ios-row {
+            display: flex;
+            align-items: center;
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--ios-border);
+        }
+
+        .ios-row:last-child {
+            border-bottom: none;
+        }
+
+        .ios-row label {
+            width: 110px;
+            font-size: 0.95rem;
+            color: var(--ios-text-main);
+            font-weight: 600;
+        }
+
+        .ios-row input, .ios-row select {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--ios-text-main);
+            font-size: 0.95rem;
+            outline: none;
+            text-align: left;
+            padding: 0;
+            font-weight: 500;
+        }
+
+        .ios-row select {
+            direction: ltr;
+            cursor: pointer;
+            color: var(--ios-blue);
+        }
+
+        /* الفلاتر والتقارير */
+        .filter-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .filter-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 12px;
+            background-color: var(--ios-card);
+            border: 1px solid var(--ios-border);
+            color: var(--ios-text-muted);
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-btn.active {
+            background-color: var(--ios-text-main);
+            color: #000;
+            border-color: var(--ios-text-main);
+        }
+
+        /* إحصائية الفلتر السريع */
+        .report-summary-card {
+            background: linear-gradient(135deg, rgba(39,39,42,0.6) 0%, rgba(24,24,27,0.8) 100%);
+            border: 1px solid var(--ios-border);
+            border-radius: 18px;
+            padding: 16px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .report-summary-card h4 {
+            font-size: 0.8rem;
+            color: var(--ios-text-muted);
+            margin-bottom: 4px;
+        }
+
+        .report-summary-card .sum-amount {
+            font-size: 1.3rem;
+            font-weight: 800;
+        }
+
+        /* الأزرار */
+        .ios-btn {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--ios-text-main);
+            color: #000000;
+            border: none;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        .ios-btn:active {
+            transform: scale(0.97);
+            background-color: #e4e4e7;
+        }
+
+        .ios-btn-secondary {
+            background-color: #7f1d1d;
+            color: #fca5a5;
+            border: 1px solid rgba(248, 113, 113, 0.2);
+            margin-top: 14px;
+        }
+
+        .ios-btn-secondary:active {
+            background-color: #991b1b;
+        }
+
+        /* القائمة وحركات السجلات */
+        .ios-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--ios-border);
+            background-color: var(--ios-card);
+            transition: background-color 0.1s;
+        }
+
+        .ios-list-item:active {
+            background-color: var(--ios-card-inner);
+        }
+
+        .ios-list-item:last-child {
+            border-bottom: none;
+        }
+
+        .ios-list-item .left-side {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .ios-list-item .tx-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background-color: var(--ios-card-inner);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .ios-list-item .tx-details h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .ios-list-item .tx-details p {
+            font-size: 0.75rem;
+            color: var(--ios-text-muted);
+            margin-top: 2px;
+        }
+
+        .ios-list-item .right-side {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .tx-cost { color: var(--ios-text-main); }
+        .tx-income { color: var(--color-expenses); }
+        .tx-transfer { color: var(--color-savings); }
+
+        /* تابهات التنقل السفلي */
+        .ios-tab-bar {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            height: 68px;
+            background: rgba(24, 24, 27, 0.85);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--ios-border);
+            border-radius: 24px;
+            display: flex;
+            justify-content: space-around;
+            padding-top: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        .tab-item {
+            background: none;
+            border: none;
+            color: #71717a;
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            width: 60px;
+            transition: color 0.2s;
+        }
+
+        .tab-item.active {
+            color: var(--ios-text-main);
+        }
+
+        .tab-icon {
+            font-size: 1.3rem;
+            transition: transform 0.2s;
+        }
+             .tab-item.active .tab-icon {
+            transform: scale(1.15);
+        }
+                /* نافذة التفاصيل المنبثقة (Vault Bottom Sheet / Modal) */
+        .ios-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .ios-modal-content {
+            background-color: var(--ios-bg);
+            border-top: 1px solid var(--ios-border);
+            width: 100%;
+            max-width: 480px;
+            border-top-left-radius: 28px;
+            border-top-right-radius: 28px;
+            padding: 24px;
+            max-height: 85vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+        }
+
+        .modal-close {
+            background: var(--ios-card-inner);
+            border: none;
+            color: var(--ios-text-main);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* صفحات التطبيق */
+        .page {
+            display: none;
+            animation: iosSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes iosSlideIn {
+            from { opacity: 0; transform: translateY(10px) scale(0.99); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .hidden-row {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div class="header-meta">
+                <span class="date-tag" id="current-date-tag">اليوم</span>
+                <h1 id="page-title">المحفظة</h1>
+            </div>
+        </header>
+
+        <div id="page-dashboard" class="page active">
+            <div class="apple-card">
+                <p>السيولة المتوفرة</p>
+                <h2 id="total-balance">0 ر.ي</h2>
+            </div>
+
+            <div class="ios-section-title">خزناتك المالية <span>(اضغط للتفاصيل)</span></div>
+            <div class="ios-grid">
+                <div class="ios-widget" id="widget-expenses" onclick="openVaultDetails('expenses')">
+                    <div class="widget-header">
+                        <span class="widget-title" style="color: var(--color-expenses);">اليومية</span>
+                        <div class="widget-icon">🛒</div>
+                    </div>
+                    <div>
+                        <div class="widget-amount" id="bal-expenses">0 ر.ي</div>
+                        <div class="progress-container">
+                            <div class="progress-bar" id="progress-expenses" style="background-color: var(--color-expenses);"></div>
+                        </div>
+                        <div class="progress-meta">
+                            <span id="meta-expenses-used">صرف: 0</span>
+                            <span id="meta-expenses-limit">حد: 50,000</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="ios-widget" id="widget-university" onclick="openVaultDetails('university')">
+                    <div class="widget-header">
+                        <span class="widget-title" style="color: var(--color-university);">الجامعة</span>
+                        <div class="widget-icon">📚</div>
+                    </div>
+                    <div>
+                        <div class="widget-amount" id="bal-university">0 ر.ي</div>
+                        <div class="progress-container">
+                            <div class="progress-bar" id="progress-university" style="background-color: var(--color-university);"></div>
+                        </div>
+                        <div class="progress-meta">
+                            <span id="meta-university-used">صرف: 0</span>
+                            <span id="meta-university-limit">حد: 30,000</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="ios-widget" id="widget-savings" onclick="openVaultDetails('savings')">
+                    <div class="widget-header">
+                        <span class="widget-title" style="color: var(--color-savings);">الادخار</span>
+                        <div class="widget-icon">💰</div>
+                    </div>
+                    <div>
+                        <div class="widget-amount" id="bal-savings">0 ر.ي</div>
+                        <div class="progress-container">
+                            <div class="progress-bar" id="progress-savings" style="background-color: var(--color-savings);"></div>
+                        </div>
+                        <div class="progress-meta">
+                            <span id="meta-savings-percent">هدف: 0%</span>
+                            <span id="meta-savings-goal">من: 100,000</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="ios-widget" id="widget-emergency" onclick="openVaultDetails('emergency')">
+                    <div class="widget-header">
+                        <span class="widget-title" style="color: var(--color-emergency);">الطوارئ</span>
+                        <div class="widget-icon">🚨</div>
+                    </div>
+                    <div>
+                        <div class="widget-amount" id="bal-emergency">0 ر.ي</div>
+                        <div class="progress-container" style="display:none;"></div>
+                        <div class="progress-meta" style="justify-content: center; margin-top: 10px;">
+                            <span>للحالات الحرجة ⚠️</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-add" class="page">
+            <div class="ios-section-title">نوع الحركة المالية</div>
+            <div class="ios-group-list">
+                <div class="ios-row">
+                    <label>العملية</label>
+                    <select id="tx-type" onchange="toggleFormMode()">
+                        <option value="out">صرف ومصاريف (خصم)</option>
+                        <option value="in">إيداع ميزانية (شحن)</option>
+                        <option value="transfer">مناقلة (تحويل بين المحافظ) 🔄</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="ios-section-title" id="fields-section-title">تفاصيل العملية</div>
+            <div class="ios-group-list">
+                <div class="ios-row" id="row-target-wallet">
+                    <label id="label-target-wallet">الخزنة</label>
+                    <select id="tx-wallet" onchange="updateSubCategories()">
+                        <option value="expenses">المصاريف اليومية</option>
+                        <option value="university">الجامعة</option>
+                        <option value="savings">الادخار</option>
+                        <option value="emergency">الطوارئ</option>
+                    </select>
+                </div>
+
+                <div class="ios-row" id="row-sub-category">
+                    <label>نوع المصروف</label>
+                    <select id="tx-sub-category" onchange="autoFillDetails()">
+                        </select>
+                </div>
+
+                <div class="ios-row hidden-row" id="row-source-wallet">
+                    <label>من خزنة</label>
+                    <select id="tx-source-wallet">
+                        <option value="expenses">المصاريف اليومية</option>
+                        <option value="university">الجامعة</option>
+                        <option value="savings">الادخار</option>
+                        <option value="emergency">الطوارئ</option>
+                    </select>
+                </div>
+
+                <div class="ios-row hidden-row" id="row-dest-wallet">
+                    <label>إلى خزنة</label>
+                    <select id="tx-dest-wallet">
+                        <option value="expenses">المصاريف اليومية</option>
+                        <option value="university">الجامعة</option>
+                        <option value="savings">الادخار</option>
+                        <option value="emergency">الطوارئ</option>
+                    </select>
+                </div>
+
+                <div class="ios-row">
+                    <label>المبلغ (ر.ي)</label>
+                    <input type="number" id="tx-amount" placeholder="0">
+                </div>
+                
+                <div class="ios-row" id="row-details">
+                    <label>البيان</label>
+                    <input type="text" id="tx-details" placeholder="ملخص">
+                </div>
+            </div>
+
+            <button class="ios-btn" onclick="executeAction()">تنفيذ العملية</button>
+        </div>
+
+        <div id="page-reports" class="page">
+            <div class="ios-section-title">التصفية والتقارير الزمنية</div>
+            <div class="filter-bar">
+                <button class="filter-btn active" id="filter-all" onclick="setPeriodFilter('all')">الكل</button>
+                <button class="filter-btn" id="filter-day" onclick="setPeriodFilter('day')">اليوم</button>
+                <button class="filter-btn" id="filter-week" onclick="setPeriodFilter('week')">هذا الأسبوع</button>
+                <button class="filter-btn" id="filter-month" onclick="setPeriodFilter('month')">هذا الشهر</button>
+            </div>
+
+            <div class="ios-group-list">
+                <div class="ios-row">
+                    <label>حسب البند</label>
+                    <select id="filter-sub-category" onchange="applyFilters()">
+                        <option value="all">كل البنود والمصاريف</option>
+                        <option value="food">وجبة طعام 🍔</option>
+                        <option value="bus">مواصلات وباص 🚌</option>
+                        <option value="market">سوبرماركت بقالة 🛒</option>
+                        <option value="prints">تصوير وملازم 📄</option>
+                        <option value="fees">رسوم دراسية 💸</option>
+                        <option value="tools">أدوات وقرطاسية ✏️</option>
+                        <option value="stash">توفير للادخار 🏦</option>
+                        <option value="medical">علاج طبي 💊</option>
+                        <option value="fix">إصلاحات طارئة 🛠️</option>
+                        <option value="other">أخرى ⚖️</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="report-summary-card">
+                <div>
+                    <h4>مجموع المصروف المفلتر</h4>
+                    <div class="sum-amount" id="filtered-sum" style="color: var(--color-emergency);">0 ر.ي</div>
+                </div>
+                <div style="text-align: left;">
+                    <span style="font-size: 1.5rem;">📊</span>
+                </div>
+            </div>
+
+            <div class="ios-section-title">نتائج التصفية والسجلات</div>
+            <div class="ios-group-list" id="report-list-element">
+                </div>
+        </div>
+
+        <div id="page-goals" class="page">
+            <div class="ios-section-title">ضبط الأهداف والحدود المالية</div>
+            <div class="ios-group-list">
+                <div class="ios-row" style="border-right: 4px solid var(--color-expenses);">
+                    <label>حد اليومية</label>
+                    <input type="number" id="setup-limit-expenses" placeholder="50,000">
+                </div>
+                <div class="ios-row" style="border-right: 4px solid var(--color-university);">
+                    <label>حد الجامعة</label>
+                    <input type="number" id="setup-limit-university" placeholder="30,000">
+                </div>
+                <div class="ios-row" style="border-right: 4px solid var(--color-savings);">
+                    <label>هدف الادخار</label>
+                    <input type="number" id="setup-goal-savings" placeholder="100,000">
+                </div>
+            </div>
+            <button class="ios-btn" onclick="saveBudgetsAndGoals()">حفظ الأهداف والميزانيات</button>
+            <button class="ios-btn ios-btn-secondary" onclick="clearAllData()">تصفير السجلات وإعادة تهيئة التطبيق</button>
+        </div>
+    </div>
+    
+    <div id="vault-modal" class="ios-modal" onclick="closeVaultDetailsOnOuterClick(event)">
+        <div class="ios-modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-vault-title">اسم الخزنة</h3>
+                <button class="modal-close" onclick="closeVaultDetails()">✕</button>
+            </div>
+            
+            <div class="apple-card" id="modal-vault-card" style="margin-bottom: 20px;">
+                <p>الرصيد المتوفر في هذه الخزنة</p>
+                <h2 id="modal-vault-balance">0 ر.ي</h2>
+            </div>
+
+            <div class="ios-section-title">بيانات الأداء والهدف</div>
+            <div class="ios-group-list" style="margin-bottom: 20px;">
+                <div class="ios-row">
+                    <label>حالة الاستهلاك</label>
+                    <span id="modal-vault-status" style="font-weight: bold;">0%</span>
+                </div>
+                <div class="ios-row" id="modal-vault-limits-row">
+                    <label id="modal-vault-limit-label">الحد المالي</label>
+                    <span id="modal-vault-limit-val">0 ر.ي</span>
+                </div>
+            </div>
+
+            <div class="ios-section-title">السجل الخاص بهذه الخزنة</div>
+            <div class="ios-group-list" id="modal-vault-history" style="margin-bottom: 0;">
+                </div>
+        </div>
+    </div>
+
+    <nav class="ios-tab-bar">
+        <button class="tab-item active" onclick="switchPage('dashboard', this, 'المحفظة')">
+            <span class="tab-icon">💳</span>
+            <span>المحفظة</span>
+        </button>
+        <button class="tab-item" onclick="switchPage('add', this, 'إضافة عملية')">
+            <span class="tab-icon">✨</span>
+            <span>إضافة</span>
+        </button>
+        <button class="tab-item" onclick="switchPage('reports', this, 'التقارير الزمنية')">
+            <span class="tab-icon">📊</span>
+            <span>التقارير</span>
+        </button>
+        <button class="tab-item" onclick="switchPage('goals', this, 'الأهداف والضبط')">
+            <span class="tab-icon">🎯</span>
+            <span>الأهداف</span>
+        </button>
+    </nav>
+
+    <script>
+        // قاعدة البيانات
+        let db = {
+            balances: { expenses: 0, university: 0, savings: 0, emergency: 0 },
+            limits: { expenses: 50000, university: 30000, savingsGoal: 100000 },
+            transactions: []
+        };
+
+        const walletNamesAr = {
+            expenses: 'اليومية',
+            university: 'الجامعة',
+            savings: 'الادخار',
+            emergency: 'الطوارئ'
+        };
+
+        const subCategories = {
+            expenses: [
+                { value: 'food', text: 'وجبة طعام 🍔', defaultText: 'شراء وجبة طعام' },
+                { value: 'bus', text: 'مواصلات وباص 🚌', defaultText: 'أجرة باص ومواصلات' },
+                { value: 'market', text: 'سوبرماركت بقالة 🛒', defaultText: 'شراء أغراض من البقالة' },
+                { value: 'other', text: 'أخرى ⚖️', defaultText: '' }
+            ],
+            university: [
+                { value: 'prints', text: 'تصوير وملازم 📄', defaultText: 'تصوير ملازم وكتب دراسية' },
+                { value: 'fees', text: 'رسوم جامعية 💸', defaultText: 'دفع رسوم دراسية/جامعية' },
+                { value: 'tools', text: 'أدوات وقرطاسية ✏️', defaultText: 'شراء أدوات مكتبية وقرطاسية' },
+                { value: 'other', text: 'أخرى 🎓', defaultText: '' }
+            ],
+            savings: [
+                { value: 'stash', text: 'توفير للمستقبل 🏦', defaultText: 'مبلغ مقتطع للادخار' },
+                { value: 'other', text: 'أخرى 💰', defaultText: '' }
+            ],
+            emergency: [
+                { value: 'medical', text: 'علاج طبي 💊', defaultText: 'مصاريف علاج وأدوية طارئة' },
+                { value: 'fix', text: 'إصلاحات طارئة 🛠️', defaultText: 'إصلاح عطل طارئ' },
+                { value: 'other', text: 'أخرى 🚨', defaultText: 'مصروف طوارئ' }
+            ]
+        };
+
+        let currentPeriodFilter = 'all'; // all, day, week, month
+
+        function setIOSDate() {
+            const options = { weekday: 'long', day: 'numeric', month: 'long' };
+            const today = new Date();
+            document.getElementById('current-date-tag').innerText = today.toLocaleDateString('ar-YE', options);
+        }
+
+        function init() {
+            setIOSDate();
+            const savedData = localStorage.getItem('my_wallet_db');
+            if (savedData) {
+                db = JSON.parse(savedData);
+                if (!db.limits) {
+                    db.limits = { expenses: 50000, university: 30000, savingsGoal: 100000 };
+                }
+            }
+            
+            document.getElementById('setup-limit-expenses').value = db.limits.expenses;
+            document.getElementById('setup-limit-university').value = db.limits.university;
+            document.getElementById('setup-goal-savings').value = db.limits.savingsGoal;
+
+            updateSubCategories();
+            updateUI();
+        }
+
+        function switchPage(pageId, btnElement, title) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-item').forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById('page-' + pageId).classList.add('active');
+            btnElement.classList.add('active');
+            document.getElementById('page-title').innerText = title;
+
+            if(pageId === 'reports') {
+                applyFilters();
+            }
+        }
+
+        function updateSubCategories() {
+            const wallet = document.getElementById('tx-wallet').value;
+            const subSelect = document.getElementById('tx-sub-category');
+            subSelect.innerHTML = '';
+                if (subCategories[wallet]) {
+                subCategories[wallet].forEach(cat => {
+                    const opt = document.createElement('option');
+                    opt.value = cat.value;
+                    opt.innerText = cat.text;
+                    subSelect.appendChild(opt);
+                });
+            }
+            autoFillDetails();
+        }
+
+        function autoFillDetails() {
+            const wallet = document.getElementById('tx-wallet').value;
+            const catValue = document.getElementById('tx-sub-category').value;
+            const detailsInput = document.getElementById('tx-details');
+
+            if (subCategories[wallet]) {
+                const found = subCategories[wallet].find(c => c.value === catValue);
+                if (found) {
+                    detailsInput.value = found.defaultText;
+                }
+            }
+        }
+
+        function toggleFormMode() {
+            const type = document.getElementById('tx-type').value;
+            const rowTarget = document.getElementById('row-target-wallet');
+            const rowSource = document.getElementById('row-source-wallet');
+            const rowDest = document.getElementById('row-dest-wallet');
+            const rowDetails = document.getElementById('row-details');
+            const rowSubCat = document.getElementById('row-sub-category');
+
+            if (type === 'transfer') {
+                rowTarget.classList.add('hidden-row');
+                rowSubCat.classList.add('hidden-row');
+                rowSource.classList.remove('hidden-row');
+                rowDest.classList.remove('hidden-row');
+                rowDetails.classList.add('hidden-row'); 
+            } else if (type === 'in') {
+                rowTarget.classList.remove('hidden-row');
+                rowSubCat.classList.add('hidden-row');
+                rowSource.classList.add('hidden-row');
+                rowDest.classList.add('hidden-row');
+                rowDetails.classList.remove('hidden-row');
+            } else {
+                rowTarget.classList.remove('hidden-row');
+                rowSubCat.classList.remove('hidden-row');
+                rowSource.classList.add('hidden-row');
+                rowDest.classList.add('hidden-row');
+                rowDetails.classList.remove('hidden-row');
+                updateSubCategories();
+            }
+        }
+
+        function saveBudgetsAndGoals() {
+            const expLimit = parseFloat(document.getElementById('setup-limit-expenses').value) || 0;
+            const uniLimit = parseFloat(document.getElementById('setup-limit-university').value) || 0;
+            const savGoal = parseFloat(document.getElementById('setup-goal-savings').value) || 0;
+
+            db.limits.expenses = expLimit;
+            db.limits.university = uniLimit;
+            db.limits.savingsGoal = savGoal;
+
+            localStorage.setItem('my_wallet_db', JSON.stringify(db));
+            alert('تم حفظ الأهداف والميزانيات بنجاح! 🎯');
+            updateUI();
+        }
+
+        function executeAction() {
+            const type = document.getElementById('tx-type').value;
+            const amount = parseFloat(document.getElementById('tx-amount').value);
+            
+            if (!amount || amount <= 0) {
+                alert('الرجاء إدخال مبلغ صحيح!');
+                return;
+            }
+
+            if (type === 'transfer') {
+                const source = document.getElementById('tx-source-wallet').value;
+                const dest = document.getElementById('tx-dest-wallet').value;
+
+                if (source === dest) {
+                    alert('لا يمكن التحويل لنفس المحفظة!');
+                    return;
+                }
+
+                if (db.balances[source] < amount) {
+                    if (!confirm(`رصيد محفظة [${walletNamesAr[source]}] غير كافٍ. هل تريد الاستمرار؟`)) {
+                        return;
+                    }
+                }
+
+                db.balances[source] -= amount;
+                db.balances[dest] += amount;
+
+                const tx = {
+                    id: Date.now(),
+                    timestamp: Date.now(),
+                    date: new Date().toLocaleDateString('ar-YE', { day: 'numeric', month: 'numeric' }),
+                    type: 'transfer',
+                    source: source,
+                    dest: dest,
+                    amount: amount,
+                    details: `نقل مالي من ${walletNamesAr[source]} إلى ${walletNamesAr[dest]}`
+                };
+
+                db.transactions.unshift(tx);
+
+            } else {
+                const wallet = document.getElementById('tx-wallet').value;
+                const details = document.getElementById('tx-details').value.trim();
+                const subCat = document.getElementById('tx-sub-category').value;
+
+                if (!details) {
+                    alert('الرجاء كتابة تفاصيل العملية!');
+                    return;
+                }
+
+                if (type === 'out' && db.balances[wallet] < amount) {
+                    if (!confirm(`الرصيد في محفظة [${walletNamesAr[wallet]}] غير كافٍ. هل تريد الاستمرار؟`)) {
+                        return;
+                    }
+                }
+                if (type === 'in') {
+                    db.balances[wallet] += amount;
+                } else {
+                    db.balances[wallet] -= amount;
+                }
+
+                const tx = {
+                    id: Date.now(),
+                    timestamp: Date.now(),
+                    date: new Date().toLocaleDateString('ar-YE', { day: 'numeric', month: 'numeric' }),
+                    type: type,
+                    wallet: wallet,
+                    subCategory: type === 'out' ? subCat : null,
+                    amount: amount,
+                    details: details
+                };
+
+                db.transactions.unshift(tx);
+            }
+
+            localStorage.setItem('my_wallet_db', JSON.stringify(db));
+
+            document.getElementById('tx-amount').value = '';
+            document.getElementById('tx-details').value = '';
+            
+            updateUI();
+            switchPage('dashboard', document.querySelectorAll('.tab-item')[0], 'المحفظة');
+        }
+
+        function calculateTotalExpenses(walletKey) {
+            return db.transactions
+                .filter(tx => tx.wallet === walletKey && tx.type === 'out')
+                .reduce((sum, tx) => sum + tx.amount, 0);
+        }
+
+        function updateUI() {
+            // تحديث الأرصدة المرئية
+            document.getElementById('bal-expenses').innerText = db.balances.expenses.toLocaleString() + ' ر.ي';
+            document.getElementById('bal-university').innerText = db.balances.university.toLocaleString() + ' ر.ي';
+            document.getElementById('bal-savings').innerText = db.balances.savings.toLocaleString() + ' ر.ي';
+            document.getElementById('bal-emergency').innerText = db.balances.emergency.toLocaleString() + ' ر.ي';
+
+            const total = Object.values(db.balances).reduce((a, b) => a + b, 0);
+            document.getElementById('total-balance').innerText = total.toLocaleString() + ' ر.ي';
+            // أشرطة التقدم للميزانيات
+            // اليومية
+            const expLimit = db.limits.expenses;
+            const expSpent = calculateTotalExpenses('expenses');
+            document.getElementById('meta-expenses-used').innerText = `صرف: ${expSpent.toLocaleString()}`;
+            document.getElementById('meta-expenses-limit').innerText = `حد: ${expLimit.toLocaleString()}`;
+            let expPercent = expLimit > 0 ? (expSpent / expLimit) * 100 : 0;
+            document.getElementById('progress-expenses').style.width = Math.min(expPercent, 100) + '%';
+
+            // الجامعة
+            const uniLimit = db.limits.university;
+            const uniSpent = calculateTotalExpenses('university');
+            document.getElementById('meta-university-used').innerText = `صرف: ${uniSpent.toLocaleString()}`;
+            document.getElementById('meta-university-limit').innerText = `حد: ${uniLimit.toLocaleString()}`;
+            let uniPercent = uniLimit > 0 ? (uniSpent / uniLimit) * 100 : 0;
+            document.getElementById('progress-university').style.width = Math.min(uniPercent, 100) + '%';
+
+            // الادخار
+            const savGoal = db.limits.savingsGoal;
+            const currentSavings = db.balances.savings;
+            let savPercent = savGoal > 0 ? (currentSavings / savGoal) * 100 : 0;
+            document.getElementById('meta-savings-percent').innerText = `هدف: ${Math.round(savPercent)}%`;
+            document.getElementById('meta-savings-goal').innerText = `من: ${savGoal.toLocaleString()}`;
+            document.getElementById('progress-savings').style.width = Math.min(savPercent, 100) + '%';
+        }
+
+        /* تفاصيل محفظة معينة (Modal) عند الضغط عليها */
+        function openVaultDetails(walletKey) {
+            const modal = document.getElementById('vault-modal');
+            const title = document.getElementById('modal-vault-title');
+            const card = document.getElementById('modal-vault-card');
+            const balance = document.getElementById('modal-vault-balance');
+            const statusText = document.getElementById('modal-vault-status');
+            const limitLabel = document.getElementById('modal-vault-limit-label');
+            const limitVal = document.getElementById('modal-vault-limit-val');
+            const historyContainer = document.getElementById('modal-vault-history');
+
+            title.innerText = `خزنة ${walletNamesAr[walletKey]}`;
+            balance.innerText = db.balances[walletKey].toLocaleString() + ' ر.ي';
+
+            // ضبط ألوان الكرت المنبثق ليتناسب مع الخزنة
+            let colors = {
+                expenses: 'linear-gradient(145deg, #065f46 0%, #09090b 100%)',
+                university: 'linear-gradient(145deg, #1e40af 0%, #09090b 100%)',
+                savings: 'linear-gradient(145deg, #854d0e 0%, #09090b 100%)',
+                emergency: 'linear-gradient(145deg, #991b1b 0%, #09090b 100%)'
+            };
+            card.style.background = colors[walletKey];
+
+            // عرض الإحصائيات حسب الخزنة المحددة
+            if (walletKey === 'expenses') {
+                const spent = calculateTotalExpenses('expenses');
+                let pct = db.limits.expenses > 0 ? Math.round((spent / db.limits.expenses) * 100) : 0;
+                statusText.innerText = `مستهلك: ${pct}% من الحد المالي`;
+                limitLabel.innerText = 'الحد الأقصى';
+                limitVal.innerText = db.limits.expenses.toLocaleString() + ' ر.ي';
+                document.getElementById('modal-vault-limits-row').style.display = 'flex';
+            } else if (walletKey === 'university') {
+                const spent = calculateTotalExpenses('university');
+                let pct = db.limits.university > 0 ? Math.round((spent / db.limits.university) * 100) : 0;
+                statusText.innerText = `مستهلك: ${pct}% من الحد المالي`;
+                limitLabel.innerText = 'الحد الأقصى';
+                limitVal.innerText = db.limits.university.toLocaleString() + ' ر.ي';
+                document.getElementById('modal-vault-limits-row').style.display = 'flex';
+            } else if (walletKey === 'savings') {
+                let pct = db.limits.savingsGoal > 0 ? Math.round((db.balances.savings / db.limits.savingsGoal) * 100) : 0;
+                statusText.innerText = `منجز: ${pct}% من الهدف العام`;
+                limitLabel.innerText = 'الهدف المالي';
+                limitVal.innerText = db.limits.savingsGoal.toLocaleString() + ' ر.ي';
+                document.getElementById('modal-vault-limits-row').style.display = 'flex';
+            } else {
+                statusText.innerText = 'خزنة طوارئ خاصة للحالات العاجلة والحرجة';
+                document.getElementById('modal-vault-limits-row').style.display = 'none';
+            }
+
+            // تصفية السجل الخاص بالخزنة المحددة فقط
+            historyContainer.innerHTML = '';
+            const filteredTx = db.transactions.filter(tx => tx.wallet === walletKey || tx.source === walletKey || tx.dest === walletKey);
+            
+            if (filteredTx.length === 0) {
+                historyContainer.innerHTML = `<p style="text-align: center; color: var(--ios-text-muted); padding: 24px; font-size: 0.85rem;">لا توجد عمليات لهذه الخزنة بعد</p>`;
+            } else {
+                filteredTx.forEach(tx => {
+                    const div = document.createElement('div');
+                    div.className = 'ios-list-item';
+                    let sign = tx.type === 'in' ? '+' : (tx.type === 'out' ? '-' : '🔄');
+                    let clr = tx.type === 'in' ? 'tx-income' : (tx.type === 'out' ? 'tx-cost' : 'tx-transfer');
+                    
+                    div.innerHTML = `
+                        <div class="left-side">
+                            <div class="tx-details">
+                                <h4 style="font-size:0.9rem;">${tx.details}</h4>
+                                <p style="font-size:0.7rem;">${tx.date}</p>
+                            </div>
+                        </div>
+                        <div class="right-side ${clr}" style="font-size:0.9rem;">
+                            ${sign} ${tx.amount.toLocaleString()} ر.ي
+                        </div>
+                    `;
+                    historyContainer.appendChild(div);
+                });
+            }
+
+            modal.style.display = 'flex';
+        }
+
+        function closeVaultDetails() {
+            document.getElementById('vault-modal').style.display = 'none';
+        }
+
+        function closeVaultDetailsOnOuterClick(event) {
+            if (event.target.id === 'vault-modal') {
+                closeVaultDetails();
+            }
+        }
+
+        /* تصفية وتقارير زمنية متطورة */
+        function setPeriodFilter(period) {
+            currentPeriodFilter = period;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('filter-' + period).classList.add('active');
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const selectedSub = document.getElementById('filter-sub-category').value;
+            const reportList = document.getElementById('report-list-element');
+            reportList.innerHTML = '';
+
+            const now = Date.now();
+            const MS_IN_DAY = 24 * 60 * 60 * 1000;
+
+            let filtered = db.transactions.filter(tx => {
+                // فلترة المدة الزمنية
+                if (currentPeriodFilter === 'day') {
+                    return (now - tx.timestamp) <= MS_IN_DAY;
+                } else if (currentPeriodFilter === 'week') {
+                    return (now - tx.timestamp) <= (7 * MS_IN_DAY);
+                } else if (currentPeriodFilter === 'month') {
+                    return (now - tx.timestamp) <= (30 * MS_IN_DAY);
+                }
+                return true; // للكل 'all'
+            });
+
+            // فلترة البنود (نوع المصروف الفرعي)
+            if (selectedSub !== 'all') {
+                filtered = filtered.filter(tx => tx.subCategory === selectedSub);
+            }
+
+            // حساب المجموع الكلي للصرف المفلتر (خصومات فقط)
+            const sum = filtered
+                .filter(tx => tx.type === 'out')
+                .reduce((total, tx) => total + tx.amount, 0);
+
+            document.getElementById('filtered-sum').innerText = sum.toLocaleString() + ' ر.ي';
+
+            // عرض القائمة المصفاة
+            const walletIcons = { expenses: '🛒', university: '📚', savings: '💰', emergency: '🚨' };
+
+            if (filtered.length === 0) {
+                reportList.innerHTML = `<p style="text-align: center; color: var(--ios-text-muted); padding: 30px; font-size: 0.85rem;">لا توجد سجلات مطابقة للتصفية الحالية</p>`;
+                return;
+            }
+
+            filtered.forEach(tx => {
+                const div = document.createElement('div');
+                div.className = 'ios-list-item';
+                let sign = tx.type === 'in' ? '+' : (tx.type === 'out' ? '-' : '🔄');
+                let clr = tx.type === 'in' ? 'tx-income' : (tx.type === 'out' ? 'tx-cost' : 'tx-transfer');
+                let icon = tx.type === 'transfer' ? '🔁' : (walletIcons[tx.wallet] || '💸');
+
+                div.innerHTML = `
+                    <div class="left-side">
+                        <div class="tx-icon">${icon}</div>
+                        <div class="tx-details">
+                            <h4>${tx.details}</h4>
+                            <p>${tx.date} ${tx.type !== 'transfer' ? `• محفظة ${walletNamesAr[tx.wallet]}` : ''}</p>
+                        </div>
+                    </div>
+                    <div class="right-side ${clr}">
+                        ${sign} ${tx.amount.toLocaleString()} ر.ي
+                    </div>
+                `;
+                reportList.appendChild(div);
+            });
+        }
+
+        function clearAllData() {
+            if (confirm('تنبيه هام جداً: هل أنت متأكد من مسح كافة المحافظ وتصفير الميزانيات والأهداف وحذف كل العمليات نهائياً؟')) {
+                localStorage.removeItem('my_wallet_db');
+                db = {
+                    balances: { expenses: 0, university: 0, savings: 0, emergency: 0 },
+                    limits: { expenses: 50000, university: 30000, savingsGoal: 100000 },
+                    transactions: []
+                };
+                updateUI();
+                alert('تمت تهيئة وتصفير التطبيق بالكامل!');
+                switchPage('dashboard', document.querySelectorAll('.tab-item')[0], 'المحفظة');
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
