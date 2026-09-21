@@ -41,6 +41,130 @@
             overflow-x: hidden;
         }
 
+        /* -------------------------------------------
+           واجهة تسجيل الدخول العصرية (Login Screen)
+        ------------------------------------------- */
+        #login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at top, #1e1b4b 0%, #09090b 80%);
+            z-index: 5000;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 40px 24px 60px 24px;
+            text-align: center;
+            overflow-y: auto;
+        }
+
+        .login-hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .app-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #6366f1, #3b82f6);
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            box-shadow: 0 12px 30px rgba(99, 102, 241, 0.4);
+            margin-bottom: 16px;
+        }
+
+        .login-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 8px;
+        }
+
+        .login-subtitle {
+            font-size: 0.95rem;
+            color: var(--ios-text-muted);
+            max-width: 320px;
+            line-height: 1.5;
+        }
+
+        /* استعراض مميزات التطبيق */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            width: 100%;
+            max-width: 400px;
+            margin: 24px 0;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--ios-border);
+            border-radius: 18px;
+            padding: 16px 12px;
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feature-icon {
+            font-size: 1.5rem;
+        }
+
+        .feature-text h4 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .feature-text p {
+            font-size: 0.7rem;
+            color: var(--ios-text-muted);
+        }
+
+        /* زر تسجيل الدخول بقوقل */
+        .google-btn {
+            width: 100%;
+            max-width: 360px;
+            background-color: #ffffff;
+            color: #000000;
+            border: none;
+            border-radius: 18px;
+            padding: 16px;
+            font-size: 1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.15);
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .google-btn:active {
+            transform: scale(0.97);
+            background-color: #f4f4f5;
+        }
+
+        .google-icon {
+            width: 22px;
+            height: 22px;
+        }
+
+        /* -------------------------------------------
+           أنماط التطبيق الأساسية
+        ------------------------------------------- */
         .container {
             padding: 20px;
             max-width: 480px;
@@ -76,7 +200,19 @@
             letter-spacing: -1px;
         }
 
-        /* كرت المحفظة الكلي */
+        .user-profile-btn {
+            background: var(--ios-card);
+            border: 1px solid var(--ios-border);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--ios-text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
         .apple-card {
             background: linear-gradient(145deg, #1e1b4b 0%, #09090b 100%);
             border: 1px solid var(--ios-border);
@@ -102,7 +238,6 @@
             letter-spacing: -1px;
         }
 
-        /* شبكة الخزنات الـ Widgets */
         .ios-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -127,7 +262,6 @@
             transform: scale(0.96);
         }
 
-        /* ألوان حدود الخزنات المتناغمة */
         #widget-expenses { border-left: 4px solid var(--color-expenses); }
         #widget-university { border-left: 4px solid var(--color-university); }
         #widget-savings { border-left: 4px solid var(--color-savings); }
@@ -163,7 +297,6 @@
             margin-top: 6px;
         }
 
-        /* أشرطة التقدم */
         .progress-container {
             width: 100%;
             background-color: var(--ios-card-inner);
@@ -188,7 +321,6 @@
             justify-content: space-between;
         }
 
-        /* العناوين والجروبات */
         .ios-section-title {
             font-size: 0.85rem;
             color: var(--ios-text-muted);
@@ -245,7 +377,6 @@
             color: var(--ios-blue);
         }
 
-        /* الفلاتر والتقارير */
         .filter-bar {
             display: flex;
             gap: 8px;
@@ -271,7 +402,6 @@
             border-color: var(--ios-text-main);
         }
 
-        /* إحصائية الفلتر السريع */
         .report-summary-card {
             background: linear-gradient(135deg, rgba(39,39,42,0.6) 0%, rgba(24,24,27,0.8) 100%);
             border: 1px solid var(--ios-border);
@@ -288,13 +418,11 @@
             color: var(--ios-text-muted);
             margin-bottom: 4px;
         }
-
-        .report-summary-card .sum-amount {
+             .report-summary-card .sum-amount {
             font-size: 1.3rem;
             font-weight: 800;
         }
 
-        /* الأزرار */
         .ios-btn {
             width: 100%;
             padding: 16px;
@@ -324,7 +452,6 @@
             background-color: #991b1b;
         }
 
-        /* القائمة وحركات السجلات */
         .ios-list-item {
             display: flex;
             justify-content: space-between;
@@ -380,7 +507,6 @@
         .tx-income { color: var(--color-expenses); }
         .tx-transfer { color: var(--color-savings); }
 
-        /* تابهات التنقل السفلي */
         .ios-tab-bar {
             position: fixed;
             bottom: 20px;
@@ -398,6 +524,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             z-index: 1000;
         }
+        
         .tab-item {
             background: none;
             border: none;
@@ -421,10 +548,11 @@
             font-size: 1.3rem;
             transition: transform 0.2s;
         }
-             .tab-item.active .tab-icon {
+
+        .tab-item.active .tab-icon {
             transform: scale(1.15);
         }
-                /* نافذة التفاصيل المنبثقة (Vault Bottom Sheet / Modal) */
+
         .ios-modal {
             position: fixed;
             top: 0;
@@ -481,7 +609,6 @@
             cursor: pointer;
         }
 
-        /* صفحات التطبيق */
         .page {
             display: none;
             animation: iosSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -503,12 +630,66 @@
 </head>
 <body>
 
+    <!-- شاشة تسجيل الدخول عبر Google -->
+    <div id="login-screen">
+        <div class="login-hero">
+            <div class="app-logo">💎</div>
+            <h1 class="login-title">iWallet Pro</h1>
+            <p class="login-subtitle">إدارتك المالية الذكية، الخزنات المتعددة، والتقارير الدقيقة في مكان واحد</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <span class="feature-icon">🛒</span>
+                <div class="feature-text">
+                    <h4>خزنات متعددة</h4>
+                    <p>اليومية، الجامعة، الادخار والطوارئ</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">📊</span>
+                <div class="feature-text">
+                    <h4>تقارير ذكية</h4>
+                    <p>تصفية زمنية دقيقة لمصاريفك</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🎯</span>
+                <div class="feature-text">
+                    <h4>تتبع الأهداف</h4>
+                    <p>حدد الحدود وتتبع حدود الإنفاق</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">☁️</span>
+                <div class="feature-text">
+                    <h4>حفظ سحابي</h4>
+                    <p>مزامنة فائقة الأمان مع حسابك</p>
+                </div>
+            </div>
+        </div>
+
+        <button class="google-btn" id="btn-google-login">
+            <svg class="google-icon" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+            </svg>
+            التسجيل باستخدام Google
+        </button>
+    </div>
+
+    <!-- واجهة التطبيق الرئيسية -->
     <div class="container">
         <header>
             <div class="header-meta">
                 <span class="date-tag" id="current-date-tag">اليوم</span>
                 <h1 id="page-title">المحفظة</h1>
             </div>
+            <button class="user-profile-btn" id="user-display-name" onclick="logoutUser()">
+                تسجيل الخروج 👤
+            </button>
         </header>
 
         <div id="page-dashboard" class="page active">
@@ -611,7 +792,7 @@
                 <div class="ios-row" id="row-sub-category">
                     <label>نوع المصروف</label>
                     <select id="tx-sub-category" onchange="autoFillDetails()">
-                        </select>
+                    </select>
                 </div>
 
                 <div class="ios-row hidden-row" id="row-source-wallet">
@@ -664,7 +845,7 @@
                         <option value="all">كل البنود والمصاريف</option>
                         <option value="food">وجبة طعام 🍔</option>
                         <option value="bus">مواصلات وباص 🚌</option>
-                        <option value="market">سوبرماركت بقالة 🛒</option>
+                                                <option value="market">سوبرماركت بقالة 🛒</option>
                         <option value="prints">تصوير وملازم 📄</option>
                         <option value="fees">رسوم دراسية 💸</option>
                         <option value="tools">أدوات وقرطاسية ✏️</option>
@@ -688,7 +869,7 @@
 
             <div class="ios-section-title">نتائج التصفية والسجلات</div>
             <div class="ios-group-list" id="report-list-element">
-                </div>
+            </div>
         </div>
 
         <div id="page-goals" class="page">
@@ -702,7 +883,7 @@
                     <label>حد الجامعة</label>
                     <input type="number" id="setup-limit-university" placeholder="30,000">
                 </div>
-                <div class="ios-row" style="border-right: 4px solid var(--color-savings);">
+      <div class="ios-row" style="border-right: 4px solid var(--color-savings);">
                     <label>هدف الادخار</label>
                     <input type="number" id="setup-goal-savings" placeholder="100,000">
                 </div>
@@ -738,7 +919,7 @@
 
             <div class="ios-section-title">السجل الخاص بهذه الخزنة</div>
             <div class="ios-group-list" id="modal-vault-history" style="margin-bottom: 0;">
-                </div>
+            </div>
         </div>
     </div>
 
@@ -761,14 +942,99 @@
         </button>
     </nav>
 
-    <script>
-        // قاعدة البيانات
-        let db = {
+    <!-- تهيئة Firebase v9 SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+        import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+
+        // إعدادات Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyA-HqIVhg0TybH8SJKCA8fNsbL-5mxfZv8",
+            authDomain: "my-wallet-cc19f.firebaseapp.com",
+            projectId: "my-wallet-cc19f",
+            storageBucket: "my-wallet-cc19f.firebasestorage.app",
+            messagingSenderId: "458796250037",
+            appId: "1:458796250037:web:2526c462ec60c43de0dffc",
+            measurementId: "G-ND8W35CR41"
+        };
+
+        // تهيئة التطبيق
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const database = getDatabase(app);
+        const provider = new GoogleAuthProvider();
+
+        let currentUser = null;
+
+        // حالة التطبيق بالذاكرة
+        window.db = {
             balances: { expenses: 0, university: 0, savings: 0, emergency: 0 },
             limits: { expenses: 50000, university: 30000, savingsGoal: 100000 },
             transactions: []
         };
 
+        // تسجيل الدخول بقوقل
+        document.getElementById('btn-google-login').addEventListener('click', () => {
+            signInWithPopup(auth, provider)
+                .catch((error) => {
+                    alert("فشل تسجيل الدخول: " + error.message);
+                });
+        });
+
+        // مراقبة حالة الجلسة والتنقل
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('user-display-name').innerText = (user.displayName || "الحساب") + " 🚪";
+                loadUserDataFromFirebase(user.uid);
+            } else {
+                currentUser = null;
+                document.getElementById('login-screen').style.display = 'flex';
+            }
+        });
+
+        // تسجيل الخروج
+        window.logoutUser = function() {
+            if (confirm("هل تريد تسجيل الخروج؟")) {
+                signOut(auth);
+            }
+        }
+
+        // حفظ البيانات في Firebase Realtime Database
+        window.saveDataToFirebase = function() {
+            if (!currentUser) return;
+            set(ref(database, 'users/' + currentUser.uid), window.db)
+                .catch(err => console.error("خطأ في حفظ البيانات:", err));
+        }
+
+        // جلب البيانات من Firebase Realtime Database
+        function loadUserDataFromFirebase(uid) {
+            const dbRef = ref(database);
+            get(child(dbRef, `users/${uid}`)).then((snapshot) => {
+                if (snapshot.exists()) {
+                    window.db = snapshot.val();
+                    if (!window.db.balances) window.db.balances = { expenses: 0, university: 0, savings: 0, emergency: 0 };
+                    if (!window.db.limits) window.db.limits = { expenses: 50000, university: 30000, savingsGoal: 100000 };
+                    if (!window.db.transactions) window.db.transactions = [];
+                } else {
+                    saveDataToFirebase();
+                }
+                
+                document.getElementById('setup-limit-expenses').value = window.db.limits.expenses;
+                document.getElementById('setup-limit-university').value = window.db.limits.university;
+                document.getElementById('setup-goal-savings').value = window.db.limits.savingsGoal;
+
+                window.updateSubCategories();
+                window.updateUI();
+            }).catch((error) => {
+                console.error(error);
+            });
+        }
+    </script>
+
+    <script>
         const walletNamesAr = {
             expenses: 'اليومية',
             university: 'الجامعة',
@@ -800,7 +1066,7 @@
             ]
         };
 
-        let currentPeriodFilter = 'all'; // all, day, week, month
+        let currentPeriodFilter = 'all';
 
         function setIOSDate() {
             const options = { weekday: 'long', day: 'numeric', month: 'long' };
@@ -810,20 +1076,6 @@
 
         function init() {
             setIOSDate();
-            const savedData = localStorage.getItem('my_wallet_db');
-            if (savedData) {
-                db = JSON.parse(savedData);
-                if (!db.limits) {
-                    db.limits = { expenses: 50000, university: 30000, savingsGoal: 100000 };
-                }
-            }
-            
-            document.getElementById('setup-limit-expenses').value = db.limits.expenses;
-            document.getElementById('setup-limit-university').value = db.limits.university;
-            document.getElementById('setup-goal-savings').value = db.limits.savingsGoal;
-
-            updateSubCategories();
-            updateUI();
         }
 
         function switchPage(pageId, btnElement, title) {
@@ -843,7 +1095,8 @@
             const wallet = document.getElementById('tx-wallet').value;
             const subSelect = document.getElementById('tx-sub-category');
             subSelect.innerHTML = '';
-                if (subCategories[wallet]) {
+
+            if (subCategories[wallet]) {
                 subCategories[wallet].forEach(cat => {
                     const opt = document.createElement('option');
                     opt.value = cat.value;
@@ -867,7 +1120,7 @@
             }
         }
 
-        function toggleFormMode() {
+ function toggleFormMode() {
             const type = document.getElementById('tx-type').value;
             const rowTarget = document.getElementById('row-target-wallet');
             const rowSource = document.getElementById('row-source-wallet');
@@ -902,12 +1155,12 @@
             const uniLimit = parseFloat(document.getElementById('setup-limit-university').value) || 0;
             const savGoal = parseFloat(document.getElementById('setup-goal-savings').value) || 0;
 
-            db.limits.expenses = expLimit;
-            db.limits.university = uniLimit;
-            db.limits.savingsGoal = savGoal;
+            window.db.limits.expenses = expLimit;
+            window.db.limits.university = uniLimit;
+            window.db.limits.savingsGoal = savGoal;
 
-            localStorage.setItem('my_wallet_db', JSON.stringify(db));
-            alert('تم حفظ الأهداف والميزانيات بنجاح! 🎯');
+            window.saveDataToFirebase();
+            alert('تم حفظ الأهداف والميزانيات في حسابك بنجاح! 🎯');
             updateUI();
         }
 
@@ -929,14 +1182,14 @@
                     return;
                 }
 
-                if (db.balances[source] < amount) {
+                if (window.db.balances[source] < amount) {
                     if (!confirm(`رصيد محفظة [${walletNamesAr[source]}] غير كافٍ. هل تريد الاستمرار؟`)) {
                         return;
                     }
                 }
 
-                db.balances[source] -= amount;
-                db.balances[dest] += amount;
+                window.db.balances[source] -= amount;
+                window.db.balances[dest] += amount;
 
                 const tx = {
                     id: Date.now(),
@@ -949,7 +1202,8 @@
                     details: `نقل مالي من ${walletNamesAr[source]} إلى ${walletNamesAr[dest]}`
                 };
 
-                db.transactions.unshift(tx);
+                if (!window.db.transactions) window.db.transactions = [];
+                window.db.transactions.unshift(tx);
 
             } else {
                 const wallet = document.getElementById('tx-wallet').value;
@@ -961,15 +1215,15 @@
                     return;
                 }
 
-                if (type === 'out' && db.balances[wallet] < amount) {
+                if (type === 'out' && window.db.balances[wallet] < amount) {
                     if (!confirm(`الرصيد في محفظة [${walletNamesAr[wallet]}] غير كافٍ. هل تريد الاستمرار؟`)) {
                         return;
                     }
                 }
                 if (type === 'in') {
-                    db.balances[wallet] += amount;
+                    window.db.balances[wallet] += amount;
                 } else {
-                    db.balances[wallet] -= amount;
+                    window.db.balances[wallet] -= amount;
                 }
 
                 const tx = {
@@ -983,10 +1237,11 @@
                     details: details
                 };
 
-                db.transactions.unshift(tx);
+                if (!window.db.transactions) window.db.transactions = [];
+                window.db.transactions.unshift(tx);
             }
 
-            localStorage.setItem('my_wallet_db', JSON.stringify(db));
+            window.saveDataToFirebase();
 
             document.getElementById('tx-amount').value = '';
             document.getElementById('tx-details').value = '';
@@ -996,47 +1251,43 @@
         }
 
         function calculateTotalExpenses(walletKey) {
-            return db.transactions
+            if (!window.db.transactions) return 0;
+            return window.db.transactions
                 .filter(tx => tx.wallet === walletKey && tx.type === 'out')
                 .reduce((sum, tx) => sum + tx.amount, 0);
         }
 
         function updateUI() {
-            // تحديث الأرصدة المرئية
-            document.getElementById('bal-expenses').innerText = db.balances.expenses.toLocaleString() + ' ر.ي';
-            document.getElementById('bal-university').innerText = db.balances.university.toLocaleString() + ' ر.ي';
-            document.getElementById('bal-savings').innerText = db.balances.savings.toLocaleString() + ' ر.ي';
-            document.getElementById('bal-emergency').innerText = db.balances.emergency.toLocaleString() + ' ر.ي';
+            document.getElementById('bal-expenses').innerText = window.db.balances.expenses.toLocaleString() + ' ر.ي';
+            document.getElementById('bal-university').innerText = window.db.balances.university.toLocaleString() + ' ر.ي';
+            document.getElementById('bal-savings').innerText = window.db.balances.savings.toLocaleString() + ' ر.ي';
+            document.getElementById('bal-emergency').innerText = window.db.balances.emergency.toLocaleString() + ' ر.ي';
 
-            const total = Object.values(db.balances).reduce((a, b) => a + b, 0);
+            const total = Object.values(window.db.balances).reduce((a, b) => a + b, 0);
             document.getElementById('total-balance').innerText = total.toLocaleString() + ' ر.ي';
-            // أشرطة التقدم للميزانيات
-            // اليومية
-            const expLimit = db.limits.expenses;
+
+            const expLimit = window.db.limits.expenses;
             const expSpent = calculateTotalExpenses('expenses');
             document.getElementById('meta-expenses-used').innerText = `صرف: ${expSpent.toLocaleString()}`;
             document.getElementById('meta-expenses-limit').innerText = `حد: ${expLimit.toLocaleString()}`;
             let expPercent = expLimit > 0 ? (expSpent / expLimit) * 100 : 0;
             document.getElementById('progress-expenses').style.width = Math.min(expPercent, 100) + '%';
 
-            // الجامعة
-            const uniLimit = db.limits.university;
+            const uniLimit = window.db.limits.university;
             const uniSpent = calculateTotalExpenses('university');
             document.getElementById('meta-university-used').innerText = `صرف: ${uniSpent.toLocaleString()}`;
             document.getElementById('meta-university-limit').innerText = `حد: ${uniLimit.toLocaleString()}`;
             let uniPercent = uniLimit > 0 ? (uniSpent / uniLimit) * 100 : 0;
             document.getElementById('progress-university').style.width = Math.min(uniPercent, 100) + '%';
 
-            // الادخار
-            const savGoal = db.limits.savingsGoal;
-            const currentSavings = db.balances.savings;
+            const savGoal = window.db.limits.savingsGoal;
+            const currentSavings = window.db.balances.savings;
             let savPercent = savGoal > 0 ? (currentSavings / savGoal) * 100 : 0;
             document.getElementById('meta-savings-percent').innerText = `هدف: ${Math.round(savPercent)}%`;
             document.getElementById('meta-savings-goal').innerText = `من: ${savGoal.toLocaleString()}`;
             document.getElementById('progress-savings').style.width = Math.min(savPercent, 100) + '%';
         }
 
-        /* تفاصيل محفظة معينة (Modal) عند الضغط عليها */
         function openVaultDetails(walletKey) {
             const modal = document.getElementById('vault-modal');
             const title = document.getElementById('modal-vault-title');
@@ -1048,9 +1299,8 @@
             const historyContainer = document.getElementById('modal-vault-history');
 
             title.innerText = `خزنة ${walletNamesAr[walletKey]}`;
-            balance.innerText = db.balances[walletKey].toLocaleString() + ' ر.ي';
+            balance.innerText = window.db.balances[walletKey].toLocaleString() + ' ر.ي';
 
-            // ضبط ألوان الكرت المنبثق ليتناسب مع الخزنة
             let colors = {
                 expenses: 'linear-gradient(145deg, #065f46 0%, #09090b 100%)',
                 university: 'linear-gradient(145deg, #1e40af 0%, #09090b 100%)',
@@ -1059,35 +1309,34 @@
             };
             card.style.background = colors[walletKey];
 
-            // عرض الإحصائيات حسب الخزنة المحددة
             if (walletKey === 'expenses') {
                 const spent = calculateTotalExpenses('expenses');
-                let pct = db.limits.expenses > 0 ? Math.round((spent / db.limits.expenses) * 100) : 0;
+                let pct = window.db.limits.expenses > 0 ? Math.round((spent / window.db.limits.expenses) * 100) : 0;
                 statusText.innerText = `مستهلك: ${pct}% من الحد المالي`;
                 limitLabel.innerText = 'الحد الأقصى';
-                limitVal.innerText = db.limits.expenses.toLocaleString() + ' ر.ي';
+                limitVal.innerText = window.db.limits.expenses.toLocaleString() + ' ر.ي';
                 document.getElementById('modal-vault-limits-row').style.display = 'flex';
             } else if (walletKey === 'university') {
                 const spent = calculateTotalExpenses('university');
-                let pct = db.limits.university > 0 ? Math.round((spent / db.limits.university) * 100) : 0;
+                let pct = window.db.limits.university > 0 ? Math.round((spent / window.db.limits.university) * 100) : 0;
                 statusText.innerText = `مستهلك: ${pct}% من الحد المالي`;
                 limitLabel.innerText = 'الحد الأقصى';
-                limitVal.innerText = db.limits.university.toLocaleString() + ' ر.ي';
+                limitVal.innerText = window.db.limits.university.toLocaleString() + ' ر.ي';
                 document.getElementById('modal-vault-limits-row').style.display = 'flex';
             } else if (walletKey === 'savings') {
-                let pct = db.limits.savingsGoal > 0 ? Math.round((db.balances.savings / db.limits.savingsGoal) * 100) : 0;
+                let pct = window.db.limits.savingsGoal > 0 ? Math.round((window.db.balances.savings / window.db.limits.savingsGoal) * 100) : 0;
                 statusText.innerText = `منجز: ${pct}% من الهدف العام`;
                 limitLabel.innerText = 'الهدف المالي';
-                limitVal.innerText = db.limits.savingsGoal.toLocaleString() + ' ر.ي';
+                limitVal.innerText = window.db.limits.savingsGoal.toLocaleString() + ' ر.ي';
                 document.getElementById('modal-vault-limits-row').style.display = 'flex';
             } else {
                 statusText.innerText = 'خزنة طوارئ خاصة للحالات العاجلة والحرجة';
                 document.getElementById('modal-vault-limits-row').style.display = 'none';
             }
 
-            // تصفية السجل الخاص بالخزنة المحددة فقط
             historyContainer.innerHTML = '';
-            const filteredTx = db.transactions.filter(tx => tx.wallet === walletKey || tx.source === walletKey || tx.dest === walletKey);
+            const txList = window.db.transactions || [];
+            const filteredTx = txList.filter(tx => tx.wallet === walletKey || tx.source === walletKey || tx.dest === walletKey);
             
             if (filteredTx.length === 0) {
                 historyContainer.innerHTML = `<p style="text-align: center; color: var(--ios-text-muted); padding: 24px; font-size: 0.85rem;">لا توجد عمليات لهذه الخزنة بعد</p>`;
@@ -1126,7 +1375,6 @@
             }
         }
 
-        /* تصفية وتقارير زمنية متطورة */
         function setPeriodFilter(period) {
             currentPeriodFilter = period;
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
@@ -1141,9 +1389,9 @@
 
             const now = Date.now();
             const MS_IN_DAY = 24 * 60 * 60 * 1000;
+            const txList = window.db.transactions || [];
 
-            let filtered = db.transactions.filter(tx => {
-                // فلترة المدة الزمنية
+            let filtered = txList.filter(tx => {
                 if (currentPeriodFilter === 'day') {
                     return (now - tx.timestamp) <= MS_IN_DAY;
                 } else if (currentPeriodFilter === 'week') {
@@ -1151,22 +1399,19 @@
                 } else if (currentPeriodFilter === 'month') {
                     return (now - tx.timestamp) <= (30 * MS_IN_DAY);
                 }
-                return true; // للكل 'all'
+                return true;
             });
 
-            // فلترة البنود (نوع المصروف الفرعي)
             if (selectedSub !== 'all') {
                 filtered = filtered.filter(tx => tx.subCategory === selectedSub);
             }
 
-            // حساب المجموع الكلي للصرف المفلتر (خصومات فقط)
             const sum = filtered
                 .filter(tx => tx.type === 'out')
                 .reduce((total, tx) => total + tx.amount, 0);
 
             document.getElementById('filtered-sum').innerText = sum.toLocaleString() + ' ر.ي';
 
-            // عرض القائمة المصفاة
             const walletIcons = { expenses: '🛒', university: '📚', savings: '💰', emergency: '🚨' };
 
             if (filtered.length === 0) {
@@ -1174,7 +1419,7 @@
                 return;
             }
 
-            filtered.forEach(tx => {
+     filtered.forEach(tx => {
                 const div = document.createElement('div');
                 div.className = 'ios-list-item';
                 let sign = tx.type === 'in' ? '+' : (tx.type === 'out' ? '-' : '🔄');
@@ -1198,15 +1443,15 @@
         }
 
         function clearAllData() {
-            if (confirm('تنبيه هام جداً: هل أنت متأكد من مسح كافة المحافظ وتصفير الميزانيات والأهداف وحذف كل العمليات نهائياً؟')) {
-                localStorage.removeItem('my_wallet_db');
-                db = {
+            if (confirm('تنبيه هام جداً: هل أنت متأكد من مسح كافة البيانات من حسابك نهائياً؟')) {
+                window.db = {
                     balances: { expenses: 0, university: 0, savings: 0, emergency: 0 },
                     limits: { expenses: 50000, university: 30000, savingsGoal: 100000 },
                     transactions: []
                 };
+                window.saveDataToFirebase();
                 updateUI();
-                alert('تمت تهيئة وتصفير التطبيق بالكامل!');
+                alert('تمت تهيئة وتصفير الحساب بالكامل!');
                 switchPage('dashboard', document.querySelectorAll('.tab-item')[0], 'المحفظة');
             }
         }
